@@ -32,7 +32,7 @@ module Mastermind
         end
         row_number += 1
       end
-      # p scores
+      p scores
     end
 
     def reset_board

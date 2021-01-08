@@ -245,27 +245,40 @@ module Mastermind
     end
 
     def count_beads(code, black_beads = 0, white_beads = 0)
-      beaded_colors = Array.new
+      black_beaded_colors = Array.new
+      white_beaded_colors = Array.new
       # Counts the black beads first
       code.each_with_index do |color, index|
         if secret_combination[index] == color
-          # next if beaded_colors.key?(color)
-          beaded_colors.push(color)
+          black_beaded_colors.push(color)
           black_beads += 1
           return [black_beads, white_beads] if black_beads == CODE_LENGTH
         end
-      end
-      # After counting the black beads, now its time to count the white ones
-      code.each do |color|
-        next if beaded_colors.include?(color)
+        # max one white bead for each color
+        next if white_beaded_colors.include?(color) || black_beaded_colors.include?(color)
+        # Fix that is not needed given the current conditions:
+        # The maximum amount of colors awarded must be the same that of in the secret code
+        # green green green red blue code suggested with pink fucsia yellow green green
+        # must print [0, 2] and not [0, 1], hint: can be done with a hashmap.
         if secret_combination.include?(color)
+          white_beaded_colors.push(color)
           white_beads += 1
-          # max one white bead for each color
-          beaded_colors.push(color)
         end
       end
       [black_beads, white_beads]
     end
+    #   end
+    #   # After counting the black beads, now its time to count the white ones
+    #   # code.each do |color|
+    #     next if black_beaded_colors.include?(color) || white_beaded_colors.include?(color)
+    #     if secret_combination.include?(color)
+    #       white_beads += 1
+    #       # max one white bead for each color
+    #       beaded_colors.push(color)
+    #     end
+    #   end
+    #   [black_beads, white_beads]
+    # end
 
     def reset_codes_and_computer
       self.secret_combination = []
